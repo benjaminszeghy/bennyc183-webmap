@@ -27,7 +27,7 @@ function formatDate(value) {
 
 const map = new mapboxgl.Map({
     container: 'map', // container ID
-    style: 'mapbox://styles/bennysz/cmh9scj9v00bo01sqcmagbn0c',
+    style: 'mapbox://styles/bennysz/cmhst1kvt00av01ss4dib7kje',
     center: [-122.27, 37.8], // starting position [lng, lat]. Note that lat must be set between -90 and 90
     zoom: 9 // starting zoom
 });
@@ -63,7 +63,7 @@ map.on('load', function() {
         };
 
         const popupContent = `
-            <div>
+            <div id="popup-content">
               <h3>${escapeHTML(g(['Problem_Area','roblem_Are']) || 'AML Site')}</h3>
               <p><strong>Location:</strong> ${escapeHTML(g(['County']) || 'n/a')}, ${escapeHTML(g(['State_Tribe_C_50','tate_Tribe_C_50']) || 'n/a')}</p>
               <p><strong>Problem:</strong> ${escapeHTML(g(['Problem_Typ','roblem_Typ']) || 'n/a')}</p>
