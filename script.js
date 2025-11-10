@@ -35,7 +35,7 @@ const map = new mapboxgl.Map({
 map.on('load', function() {
     map.addSource('points-data', {
         type: 'geojson',
-        data: 'https://raw.githubusercontent.com/benjaminszeghy/bennyc183-webmap/main/data/amlis.geojson'
+        data: 'https://raw.githubusercontent.com/benjaminszeghy/bennyc183-webmap/main/data/uranium_mines.geojson'
     });
     
     map.addLayer({
@@ -43,7 +43,7 @@ map.on('load', function() {
         type: 'circle',
         source: 'points-data',
         paint: {
-            'circle-color': '#4264FB',
+            'circle-color': '#CC2F00',
             'circle-radius': 6,
             'circle-stroke-width': 2,
             'circle-stroke-color': '#ffffff'
@@ -64,16 +64,30 @@ map.on('load', function() {
 
         const popupContent = `
             <div id="popup-content">
-              <h3>${escapeHTML(g(['Problem_Area','roblem_Are']) || 'AML Site')}</h3>
-              <p><strong>Location:</strong> ${escapeHTML(g(['County']) || 'n/a')}, ${escapeHTML(g(['State_Tribe_C_50','tate_Tribe_C_50']) || 'n/a')}</p>
-              <p><strong>Problem:</strong> ${escapeHTML(g(['Problem_Typ','roblem_Typ']) || 'n/a')}</p>
-              <p><strong>Priority:</strong> ${escapeHTML(g(['Problem_Pri','roblem_Pri']) || 'n/a')}</p>
-              <p><strong>Mining Type:</strong> ${escapeHTML(g(['Mining_Type','ining_Type']) || 'n/a')}</p>
-              <p><strong>Funding Source:</strong> ${escapeHTML(g(['Funding_Sou','unding_Sou']) || 'n/a')}</p>
-              <p><strong>Unfunded Cost:</strong> ${formatCurrency(g(['Unfunded_Co','nfunded_Co']))}</p>
-              <p><strong>Completed Cost:</strong> ${formatCurrency(g(['Completed_C','ompleted_C']))}</p>
-              <p><strong>Date Prepared:</strong> ${formatDate(g(['Date_Prepared','ate_Prepar']))}</p>
-              <p><strong>Date Revised:</strong> ${formatDate(g(['Date_Revised','ate_Revise']))}</p>
+                <h3>${escapeHTML(g(['MINENAME','DB_ALIAS'])) || 'Uranium Site'}</h3>
+
+                <p><strong>Location:</strong>
+                ${escapeHTML(g(['COUNTY_NAM'])) || 'n/a'},
+                ${escapeHTML(g(['STATE_NAME'])) || 'n/a'}
+                ${g(['ZIPCODE']) ? `(${escapeHTML(g(['ZIPCODE']))})` : ''}</p>
+
+                <p><strong>State/County FIPS:</strong>
+                ${escapeHTML(g(['STATE_CODE'])) || '—'} /
+                ${escapeHTML(g(['CNTY_FIPS'])) || '—'}</p>
+
+                <p><strong>MILS ID:</strong> ${escapeHTML(g(['IDMILS'])) || '—'}</p>
+
+                <p><strong>QA/QC:</strong>
+                ${escapeHTML(g(['QAQC'])) || '—'}
+                ${g(['QC_FLAG']) ? `• QC Flag: ${escapeHTML(g(['QC_FLAG']))}` : ''}</p>
+
+                <p><strong>Status:</strong>
+                ${(g(['RECLAIMED']) == 1 || g(['RECLAIMED']) === '1') ? 'Reclaimed' : 'Unreclaimed'}</p>
+
+                <p><strong>Match:</strong>
+                ${escapeHTML(g(['MATCHID'])) || '—'}
+                ${g(['MATCHNAME']) ? `• ${escapeHTML(g(['MATCHNAME']))}` : ''}</p>
+
             </div>
         `;
         
