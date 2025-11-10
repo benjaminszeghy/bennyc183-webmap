@@ -13,7 +13,7 @@ body {
   }
 #popup-content{
   color: aliceblue;
-  font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.35;
 }
@@ -25,7 +25,57 @@ body {
 }
 
 #heading {
-  z-index: 9999
-  position: absolute;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+  pointer-events: none;
+  margin: 0;
+  background-color: whitesmoke;
+  padding: 25px;
+  margin: 0px;
+  border-width: 6px;
+  border-style: dashed;
+  border-color: #0b3d3a;
+}
 
+#byline {
+  position: fixed;
+  bottom: 120px;
+  right: 16px;
+  z-index: 1000;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  background-color: whitesmoke;
+  padding: 15px;
+  margin: 0px;
+  border-width: 4px;
+  border-style: dashed;
+  border-color: #0b3d3a;
+  font-size: 14px;
+}
+
+.map-dock{
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 2;
+    margin: 100px;
+}
+
+.map-dock-btn{
+    padding: 6px 10px;
+    font: 600 12px/1.1 "IBM Plex Sans", system-ui, sans-serif;
+    color: #e8f5f1;
+    background: #0b3d3a;
+    border: 1px solid #5fd1b8;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+}
+
+.map-dock-btn:hover{
+    background: #0e4c47;
 }

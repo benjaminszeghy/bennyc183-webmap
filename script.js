@@ -10,14 +10,12 @@ function escapeHTML(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
-
 function formatCurrency(value) {
     if (value === null || value === undefined || value === '') return 'n/a';
     const num = Number(String(value).replace(/[^0-9.-]+/g, ''));
     if (Number.isNaN(num)) return escapeHTML(String(value));
     return num.toLocaleString(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 }
-
 function formatDate(value) {
     if (!value) return 'n/a';
     const d = new Date(value);
@@ -26,18 +24,18 @@ function formatDate(value) {
 }
 
 const map = new mapboxgl.Map({
-    container: 'map', // container ID
+    container: 'map',
     style: 'mapbox://styles/bennysz/cmhst1kvt00av01ss4dib7kje',
-    center: [-122.27, 37.8], // starting position [lng, lat]. Note that lat must be set between -90 and 90
-    zoom: 9 // starting zoom
+    center: [-122.27, 37.8],
+    zoom: 9
 });
 
-map.on('load', function() {
+map.on('load', function () {
     map.addSource('points-data', {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/benjaminszeghy/bennyc183-webmap/main/data/uranium_mines.geojson'
     });
-    
+
     map.addLayer({
         id: 'points-layer',
         type: 'circle',
@@ -49,12 +47,13 @@ map.on('load', function() {
             'circle-stroke-color': '#ffffff'
         }
     });
-    
-    map.on('click', 'points-layer', (e) => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const p = e.features[0].properties || {};
 
-        // small accessor that tries common (full/truncated) keys
+    // --- Popups ---
+    map.on('click', 'points-layer', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const p = e.features[0].properties || {};
+
+        // accessor that tries common (full/truncated) keys
         const g = (keys) => {
             for (const k of (Array.isArray(keys) ? keys : [keys])) {
                 if (p[k] !== undefined && p[k] !== null && String(p[k]).trim() !== '') return p[k];
@@ -87,14 +86,34 @@ map.on('load', function() {
                 <p><strong>Match:</strong>
                 ${escapeHTML(g(['MATCHID'])) || '—'}
                 ${g(['MATCHNAME']) ? `• ${escapeHTML(g(['MATCHNAME']))}` : ''}</p>
-
             </div>
         `;
-        
-        new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(popupContent)
-            .addTo(map);
+
+        new mapboxgl.Popup().setLngLat(coordinates).setHTML(popupContent).addTo(map);
     });
-    
+
+    // --- Quick-zoom buttons for classic US uranium regions ---
+    const AOIS = [
+      { id: 'uravan',  label: 'Uravan (CO/UT)',       center: [-108.9, 38.7],  zoom: 8.2 },
+      { id: 'grants',  label: 'Grants Belt (NM)',     center: [-107.85, 35.2], zoom: 8.0 },
+      { id: 'powder',  label: 'Powder River (WY)',    center: [-106.7, 43.9],  zoom: 6.8 },
+      { id: 'stx',     label: 'South Texas',          center: [-98.0, 28.5],   zoom: 7.2 },
+      { id: 'azstrip', label: 'Arizona Strip',        center: [-112.5, 36.5],  zoom: 7.0 },
+    ];
+
+    // create a small button dock in the top-left of the map
+    const dock = document.createElement('div');
+    dock.className = 'map-dock';
+
+    AOIS.forEach(aoi => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'map-dock-btn';
+        btn.textContent = aoi.label;
+        btn.onclick = () => map.flyTo({ center: aoi.center, zoom: aoi.zoom, essential: true });
+        dock.appendChild(btn);
+    });
+
+    // attach dock to the map container
+    map.getContainer().appendChild(dock);
 });
