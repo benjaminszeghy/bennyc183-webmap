@@ -1,6 +1,5 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiYmVubnlzeiIsImEiOiJjbWg5czU5dzMwOW5iMmtwcDdzeWFwem1hIn0.V7sdPtla47boikpVDDyscA';
 
-// helper: safe HTML escape, currency and date formatting
 function escapeHTML(str) {
     if (str === null || str === undefined) return '';
     return String(str)
@@ -10,24 +9,13 @@ function escapeHTML(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
-function formatCurrency(value) {
-    if (value === null || value === undefined || value === '') return 'n/a';
-    const num = Number(String(value).replace(/[^0-9.-]+/g, ''));
-    if (Number.isNaN(num)) return escapeHTML(String(value));
-    return num.toLocaleString(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-}
-function formatDate(value) {
-    if (!value) return 'n/a';
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return escapeHTML(String(value));
-    return d.toLocaleDateString();
-}
+
 
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/bennysz/cmhst1kvt00av01ss4dib7kje',
-    center: [-122.27, 37.8],
-    zoom: 9
+    center: [-98.5795, 39.8283],
+    zoom: 3.5
 });
 
 map.on('load', function () {
